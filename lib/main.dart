@@ -46,17 +46,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<Tarefa> _tarefas = [
-    Tarefa(
-      titulo: "Estudar Flutter",
-      descricao: "Avançar no módulo de widgets",
-    ),
-    Tarefa(titulo: "Comprar pão", descricao: "Integral, se tiver"),
-    Tarefa(titulo: "Comprar pão", descricao: "Integral, se tiver"),
-    Tarefa(titulo: "Comprar pão", descricao: "Integral, se tiver"),
-    Tarefa(titulo: "Comprar pão", descricao: "Integral, se tiver"),
-    Tarefa(titulo: "Comprar pão", descricao: "Integral, se tiver"),
-  ];
+  List<Tarefa> _tarefas = [];
 
   void _navegarParaTarefas() async {
     final resultado = await Navigator.of(context).push<List<Tarefa>>(

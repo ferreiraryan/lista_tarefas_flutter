@@ -1,8 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api
 
-import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:lista_de_tarefas/main.dart';
 import 'package:lista_de_tarefas/models/tarefas_models.dart';
 import 'package:lista_de_tarefas/widgets/tarefa_widget.dart';
@@ -65,24 +64,62 @@ class _TarefasScreenState extends State<TarefasScreen> {
   void _mostrarDialogoInserir() {
     String titulo = '';
     String descricao = '';
+    Color corSelecionada = Colors.white;
 
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
           title: const Text('Nova Tarefa'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                decoration: const InputDecoration(labelText: 'Título'),
-                onChanged: (value) => titulo = value,
-              ),
-              TextField(
-                decoration: const InputDecoration(labelText: 'Descrição'),
-                onChanged: (value) => descricao = value,
-              ),
-            ],
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  decoration: const InputDecoration(labelText: 'Título'),
+                  onChanged: (value) => titulo = value,
+                ),
+                TextField(
+                  decoration: const InputDecoration(labelText: 'Descrição'),
+                  onChanged: (value) => descricao = value,
+                ),
+                const SizedBox(height: 10),
+                ElevatedButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: const Text('Escolha a cor'),
+                          content: SingleChildScrollView(
+                            child: ColorPicker(
+                              pickerColor: corSelecionada,
+                              onColorChanged: (color) {
+                                corSelecionada = color;
+                              },
+                              pickerAreaHeightPercent: 0.8,
+                            ),
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: const Text('Cancelar'),
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.pop(context); // fecha o color picker
+                              },
+                              child: const Text('Selecionar'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                  child: const Text('Selecionar cor'),
+                ),
+              ],
+            ),
           ),
           actions: [
             TextButton(
@@ -91,12 +128,17 @@ class _TarefasScreenState extends State<TarefasScreen> {
             ),
             ElevatedButton(
               onPressed: () {
-                if (titulo.isNotEmpty) {
-                  setState(() {
-                    _tarefas.add(Tarefa(titulo: titulo, descricao: descricao));
-                  });
-                  Navigator.pop(context);
-                }
+                if (titulo.trim().isEmpty) return;
+                setState(() {
+                  _tarefas.add(
+                    Tarefa(
+                      titulo: titulo,
+                      descricao: descricao,
+                      corFundo: corSelecionada,
+                    ),
+                  );
+                });
+                Navigator.pop(context);
               },
               child: const Text('Salvar'),
             ),
@@ -141,8 +183,8 @@ class _TarefasScreenState extends State<TarefasScreen> {
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 4,
-                          crossAxisSpacing: 10,
-                          mainAxisSpacing: 10,
+                          crossAxisSpacing: 5,
+                          mainAxisSpacing: 5,
                           childAspectRatio: 0.8,
                         ),
                   ),
@@ -153,7 +195,7 @@ class _TarefasScreenState extends State<TarefasScreen> {
         onPressed: _mostrarDialogoInserir,
 
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color.fromARGB(255, 10, 159, 246),
+          backgroundColor: const Color.fromARGB(255, 19, 204, 208),
           foregroundColor: Colors.white,
           padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
           shape: RoundedRectangleBorder(
