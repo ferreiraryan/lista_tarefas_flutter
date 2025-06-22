@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lista_de_tarefas/screens/tarefas_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -43,6 +44,12 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  void _navegarParaTarefas() {
+    Navigator.of(
+      context,
+    ).push(MaterialPageRoute(builder: (context) => TarefasScreen()));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,7 +58,10 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: TextButton(onPressed: () => {}, child: Text("Ir para Tarefas")),
+        child: TextButton(
+          onPressed: _navegarParaTarefas,
+          child: Text("Ir para Tarefas"),
+        ),
       ),
     );
   }
