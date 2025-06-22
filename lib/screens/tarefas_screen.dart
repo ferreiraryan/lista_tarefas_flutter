@@ -62,12 +62,48 @@ class _TarefasScreenState extends State<TarefasScreen> {
     _isLoading = false;
   }
 
-  void _navegarParaCadastro() {
-    // Navigator.of(context).push(
-    //   MaterialPageRoute(
-    //     builder: (context) => CadastroTarefascreen(onSave: _adicionarTarefa),
-    //   ),
-    // );
+  void _mostrarDialogoInserir() {
+    String titulo = '';
+    String descricao = '';
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Nova Tarefa'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                decoration: const InputDecoration(labelText: 'Título'),
+                onChanged: (value) => titulo = value,
+              ),
+              TextField(
+                decoration: const InputDecoration(labelText: 'Descrição'),
+                onChanged: (value) => descricao = value,
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancelar'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                if (titulo.isNotEmpty) {
+                  setState(() {
+                    _tarefas.add(Tarefa(titulo: titulo, descricao: descricao));
+                  });
+                  Navigator.pop(context);
+                }
+              },
+              child: const Text('Salvar'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -114,7 +150,7 @@ class _TarefasScreenState extends State<TarefasScreen> {
         ],
       ),
       floatingActionButton: ElevatedButton(
-        onPressed: _navegarParaCadastro,
+        onPressed: _mostrarDialogoInserir,
 
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color.fromARGB(255, 10, 159, 246),
