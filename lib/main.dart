@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lista_de_tarefas/models/tarefas_models.dart';
 import 'package:lista_de_tarefas/screens/tarefas_screen.dart';
 
 void main() {
@@ -45,10 +46,28 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  void _navegarParaTarefas() {
-    Navigator.of(
-      context,
-    ).push(MaterialPageRoute(builder: (context) => TarefasScreen()));
+  List<Tarefa> _tarefas = [
+    Tarefa(
+      titulo: "Estudar Flutter",
+      descricao: "Avançar no módulo de widgets",
+    ),
+    Tarefa(titulo: "Comprar pão", descricao: "Integral, se tiver"),
+    Tarefa(titulo: "Comprar pão", descricao: "Integral, se tiver"),
+    Tarefa(titulo: "Comprar pão", descricao: "Integral, se tiver"),
+    Tarefa(titulo: "Comprar pão", descricao: "Integral, se tiver"),
+    Tarefa(titulo: "Comprar pão", descricao: "Integral, se tiver"),
+  ];
+
+  void _navegarParaTarefas() async {
+    final resultado = await Navigator.of(context).push<List<Tarefa>>(
+      MaterialPageRoute(builder: (context) => TarefasScreen(tarefas: _tarefas)),
+    );
+
+    if (resultado != null) {
+      setState(() {
+        _tarefas = resultado;
+      });
+    }
   }
 
   @override

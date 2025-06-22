@@ -3,6 +3,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:lista_de_tarefas/main.dart';
 import 'package:lista_de_tarefas/models/tarefas_models.dart';
 import 'package:lista_de_tarefas/widgets/tarefa_widget.dart';
 
@@ -30,14 +31,16 @@ class MyApp extends StatelessWidget {
       ),
 
       // CHAMA A OS WIDGETS DE Tarefas
-      home: const TarefasScreen(),
+      home: const MyHomePage(title: 'Lista de tarefas'),
     );
   }
 }
 
 // CRIA A TELA PRINCIPAL
 class TarefasScreen extends StatefulWidget {
-  const TarefasScreen({super.key});
+  final List<Tarefa> tarefas;
+
+  const TarefasScreen({super.key, required this.tarefas});
 
   @override
   _TarefasScreenState createState() => _TarefasScreenState();
@@ -46,7 +49,7 @@ class TarefasScreen extends StatefulWidget {
 // CONTROI A TELA PRINCIPAL E PREENCHE COM OS Tarefas
 class _TarefasScreenState extends State<TarefasScreen> {
   bool _isLoading = true;
-  List<Tarefa> _tarefas = [];
+  late List<Tarefa> _tarefas;
 
   @override
   void initState() {
@@ -55,17 +58,7 @@ class _TarefasScreenState extends State<TarefasScreen> {
   }
 
   Future<void> _carregarTarefas() async {
-    _tarefas = [
-      Tarefa(
-        titulo: "Estudar Flutter",
-        descricao: "Avançar no módulo de widgets",
-      ),
-      Tarefa(titulo: "Comprar pão", descricao: "Integral, se tiver"),
-      Tarefa(titulo: "Comprar pão", descricao: "Integral, se tiver"),
-      Tarefa(titulo: "Comprar pão", descricao: "Integral, se tiver"),
-      Tarefa(titulo: "Comprar pão", descricao: "Integral, se tiver"),
-      Tarefa(titulo: "Comprar pão", descricao: "Integral, se tiver"),
-    ];
+    _tarefas = List.from(widget.tarefas);
     _isLoading = false;
   }
 
@@ -80,7 +73,15 @@ class _TarefasScreenState extends State<TarefasScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Catálogo de Tarefas')),
+      appBar: AppBar(
+        title: const Text('Catálogo de Tarefas'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context, _tarefas);
+          },
+        ),
+      ),
       body: Column(
         children: [
           Expanded(
